@@ -1,12 +1,12 @@
 {
-  "name": "postgrest-client",
+  "name": "tassl-postgrest-client",
   "version": "1.1.2",
   "description": "Advanced client for the PostgREST API",
   "author": "Caleb Meredith <calebmeredith8@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/calebmer/postgrest-client.git"
+    "url": "https://github.com/tassl-app/postgrest-client"
   },
   "keywords": [
     "postgrest",
