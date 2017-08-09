@@ -66,7 +66,7 @@ var PostgREST =
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -88,36 +88,36 @@ var PostgREST =
 	 */
 
 	var Api = function () {
-	    // TODO: Use an `OPTIONS *` request to get the server version to output
-	    // warnings for unsupported features.
-	    function Api(url) {
-	        var user = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-	        var pass = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+	  // TODO: Use an `OPTIONS *` request to get the server version to output
+	  // warnings for unsupported features.
+	  function Api(url) {
+	    var user = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+	    var pass = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
 
-	        _classCallCheck(this, Api);
+	    _classCallCheck(this, Api);
 
-	        this.url = url;
-	        this.user = user;
-	        this.pass = pass;
+	    this.url = url;
+	    this.user = user;
+	    this.pass = pass;
+	  }
+
+	  /**
+	   * Convenience wrapper for starting a PostgREST request builder. Adds the
+	   * API URL to the provided path.
+	   *
+	   * @param {string} The HTTP method of the request.
+	   * @param {string} The path of the request.
+	   * @returns {ApiRequest} The API request object.
+	   */
+
+	  _createClass(Api, [{
+	    key: 'request',
+	    value: function request(method, path) {
+	      return new _ApiRequest2.default(method, this.url + path, this.user, this.pass);
 	    }
+	  }]);
 
-	    /**
-	     * Convenience wrapper for starting a PostgREST request builder. Adds the
-	     * API URL to the provided path.
-	     *
-	     * @param {string} The HTTP method of the request.
-	     * @param {string} The path of the request.
-	     * @returns {ApiRequest} The API request object.
-	     */
-
-	    _createClass(Api, [{
-	        key: 'request',
-	        value: function request(method, path) {
-	            return new _ApiRequest2.default(method, this.url + path, this.user, this.pass);
-	        }
-	    }]);
-
-	    return Api;
+	  return Api;
 	}();
 
 	/**
@@ -130,9 +130,9 @@ var PostgREST =
 	var methods = ['POST', 'GET', 'PATCH', 'DELETE', 'OPTIONS'];
 
 	methods.forEach(function (method) {
-	    return Api.prototype[method.toLowerCase()] = function requestMethod(path) {
-	        return this.request(method, path);
-	    };
+	  return Api.prototype[method.toLowerCase()] = function requestMethod(path) {
+	    return this.request(method, path);
+	  };
 	});
 
 	exports.default = Api;
@@ -185,7 +185,11 @@ var PostgREST =
 
 	    _this.set('Accept', 'application/json');
 	    _this.user = user;
-	    _this.path = path;
+	    _this.pass = pass;
+
+	    if (typeof user === 'string' && pass == null) {
+	      _this.set('Authorization', 'Bearer ' + user);
+	    }
 
 	    // Fix for superagent disconnect on client & server.
 	    if (!_this.get) {
@@ -206,10 +210,7 @@ var PostgREST =
 
 	  _createClass(ApiRequest, [{
 	    key: 'auth',
-	    value: function auth() {
-	      var user = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.user;
-	      var pass = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.pass;
-
+	    value: function auth(user, pass) {
 	      if (typeof user === 'string' && pass == null) {
 	        this.set('Authorization', 'Bearer ' + user);
 	        return this;
